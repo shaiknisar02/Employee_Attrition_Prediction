@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Attrition Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            text-align: center;
+            font-size: 18px;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .warning {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Employee Attrition Prediction</h2>
+        <form method="POST">
+            {% for feature in features %}
+                <div class="form-group">
+                    <label for="{{ feature }}">{{ feature.replace('_', ' ') }}</label>
+                    {% if feature in categorical_options %}
+                        <select name="{{ feature }}" id="{{ feature }}" required>
+                            {% for option in categorical_options[feature] %}
+                                <option value="{{ option }}">{{ option }}</option>
+                            {% endfor %}
+                        </select>
+                    {% else %}
+                        <input type="text" name="{{ feature }}" id="{{ feature }}" required>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn">Predict</button>
+        </form>
+
+        {% if prediction %}
+            <div class="message {{ 'warning' if 'Yes' in prediction else 'success' }}">
+                {{ prediction }}
+            </div>
+        {% endif %}
+
+        {% if error %}
+            <div class="message warning">
+                {{ error }}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
